@@ -10,6 +10,10 @@ import { validate } from 'class-validator';
 @Injectable()
 export class ValidationPipe implements PipeTransform<any> {
   async transform(value: any, { metatype }: ArgumentMetadata) {
+    if (value instanceof Object && this.isEmpty(value)) {
+      throw new BadRequestException('Validation failed: No body submitted');
+    }
+
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
@@ -28,5 +32,13 @@ export class ValidationPipe implements PipeTransform<any> {
     // eslint-disable-next-line
     const types: Function[] = [String, Boolean, Number, Array, Object];
     return !types.includes(metatype);
+  }
+
+  private isEmpty(value: any): boolean {
+    if (Object.keys(value).length > 0) {
+      return false;
+    }
+
+    return true;
   }
 }
