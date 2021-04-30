@@ -7,16 +7,16 @@ export class UserController {
 
   @Get('user')
   showAllUsers() {
-    this.userService.showAll();
+    return this.userService.showAll();
   }
 
   @Post('login')
   login(@Body() data) {
-    this.userService.login(data);
+    return this.userService.login(data);
   }
 
   @Post('register')
   register(@Body() data) {
-    this.userService.register(data);
+    return this.userService.register(data);
   }
 }
