@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserDto } from './user.dto';
 import { UserEntity } from './user.entity';
 
 @Injectable()
@@ -15,7 +16,7 @@ export class UserService {
     return users.map(user => user.toResponseObject(false));
   }
 
-  async login(data) {
+  async login(data: UserDto) {
     const { username, password } = data;
     const user = await this.userRepository.findOne({ where: { username } });
 
@@ -29,7 +30,7 @@ export class UserService {
     return user.toResponseObject();
   }
 
-  async register(data) {
+  async register(data: UserDto) {
     const { username, password } = data;
     let user: any = await this.userRepository.findOne({ where: { username } });
 
