@@ -12,6 +12,19 @@ export class UserService {
 
   async showAll() {
     const users = await this.userRepository.find();
-    return users.map(user => user.toResponseObject());
+  }
+
+  async login(data) {
+    const { username, password } = data;
+    const user = await this.userRepository.findOne({ where: { username } });
+
+    if (!user || (await user.comparePassword(password))) {
+      throw new HttpException(
+        'Invalid username/password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return user.toResponseObject();
   }
 }
