@@ -14,4 +14,9 @@ export class UserController {
   login(@Body() data) {
     this.userService.login(data);
   }
+
+  @Post('register')
+  register(@Body() data) {
+    this.userService.register(data);
+  }
 }
