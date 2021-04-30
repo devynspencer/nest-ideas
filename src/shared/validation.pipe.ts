@@ -22,7 +22,9 @@ export class ValidationPipe implements PipeTransform<any> {
     const errors = await validate(object);
 
     if (errors.length > 0) {
-      throw new BadRequestException(`Validation failed: ${this.formatErrors(errors)}`);
+      throw new BadRequestException(
+        `Validation failed: ${this.formatErrors(errors)}`,
+      );
     }
 
     return value;
