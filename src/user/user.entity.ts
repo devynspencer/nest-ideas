@@ -42,7 +42,7 @@ export class UserEntity {
 
   toResponseObject(includeToken = true) {
     const { id, created, username, token } = this;
-    const responseObject = { id, created, username, token };
+    const responseObject: any = { id, created, username };
 
     if (includeToken) {
       responseObject.token = token;
