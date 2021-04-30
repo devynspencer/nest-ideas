@@ -40,8 +40,14 @@ export class UserEntity {
     return await bcrypt.compare(attempt, this.password);
   }
 
-  toResponseObject() {
-    const { id, created, username } = this;
-    return { id, created, username };
+  toResponseObject(includeToken = true) {
+    const { id, created, username, token } = this;
+    const responseObject = { id, created, username, token };
+
+    if (includeToken) {
+      responseObject.token = token;
+    }
+
+    return responseObject;
   }
 }
