@@ -1,0 +1,2 @@
+SELECT 'CREATE DATABASE ideas'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'ideas')\gexec
