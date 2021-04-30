@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { IdeaService } from './idea.service';
 import { IdeaDto } from './idea.dto';
 
@@ -13,6 +22,7 @@ export class IdeaController {
 
   @Post()
   createIdea(@Body() data: IdeaDto) {
+    Logger.log(`Creating idea: ${data}`, 'Idea');
     return this.ideaService.create(data);
   }
 
@@ -23,6 +33,7 @@ export class IdeaController {
 
   @Put(':id')
   updateIdea(@Param('id') id: string, @Body() data: Partial<IdeaDto>) {
+    Logger.log(`Updating idea ${id}: ${data}`, 'Idea');
     return this.ideaService.update(id, data);
   }
 
