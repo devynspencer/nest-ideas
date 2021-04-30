@@ -22,4 +22,9 @@ export class UserEntity {
 
   @Column('text')
   password: string;
+
+  toResponseObject() {
+    const { id, created, username } = this;
+    return { id, created, username };
+  }
 }
