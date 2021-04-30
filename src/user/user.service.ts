@@ -30,7 +30,7 @@ export class UserService {
   }
 
   async register(data) {
-    const { username } = data;
+    const { username, password } = data;
     let user: any = await this.userRepository.findOne({ where: { username } });
 
     if (user) {
@@ -40,7 +40,7 @@ export class UserService {
       );
     }
 
-    user = await this.userRepository.create(data);
+    user = await this.userRepository.create({ username, password });
     await this.userRepository.save(user);
     return user.toResponseObject();
   }
