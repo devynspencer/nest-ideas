@@ -12,6 +12,7 @@ export class UserService {
 
   async showAll() {
     const users = await this.userRepository.find();
+    return users.map(user => user.toResponseObject());
   }
 
   async login(data) {
