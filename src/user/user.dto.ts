@@ -7,3 +7,10 @@ export class UserDto {
   @IsNotEmpty()
   password: string;
 }
+
+export interface UserRo {
+  id: string;
+  username: string;
+  created: Date;
+  token?: string;
+}
