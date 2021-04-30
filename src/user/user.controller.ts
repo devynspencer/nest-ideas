@@ -9,7 +9,7 @@ export class UserController {
 
   constructor(private userService: UserService) {}
 
-  @Get('user')
+  @Get('api/user')
   showAllUsers() {
     return this.userService.showAll();
   }
