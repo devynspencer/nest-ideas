@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+import { UserRo } from './user.dto';
 
 @Entity('user')
 export class UserEntity {
@@ -40,9 +41,9 @@ export class UserEntity {
     return await bcrypt.compare(attempt, this.password);
   }
 
-  toResponseObject(includeToken = true) {
+  toResponseObject(includeToken = true): UserRo {
     const { id, created, username, token } = this;
-    const responseObject: any = { id, created, username };
+    const responseObject: UserRo = { id, created, username };
 
     if (includeToken) {
       responseObject.token = token;
