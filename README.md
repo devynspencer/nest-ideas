@@ -24,7 +24,16 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A Reddit clone example to learn the [Nest](https://github.com/nestjs/nest) framework.
+
+
+### Overview
+
+- Database -- PostgreSQL
+- REST API -- NestJS
+- GraphQL API -- NestJS
+- Front-end -- Angular with NGRX for state management
+
 
 ## Installation
 
