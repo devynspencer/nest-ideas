@@ -25,7 +25,7 @@ export class IdeaService {
     return await this.ideaRepository.findOne({ where: { id } });
   }
 
-  async update(id: string, data: IdeaDto) {
+  async update(id: string, data: Partial<IdeaDto>) {
     await this.ideaRepository.update({ id }, data);
     return await this.ideaRepository.findOne({ id });
   }

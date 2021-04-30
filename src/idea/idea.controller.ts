@@ -22,7 +22,7 @@ export class IdeaController {
   }
 
   @Put(':id')
-  updateIdea(@Param('id') id: string, @Body() data: IdeaDto) {
+  updateIdea(@Param('id') id: string, @Body() data: Partial<IdeaDto>) {
     return this.ideaService.update(id, data);
   }
 
