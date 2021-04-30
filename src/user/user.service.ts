@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from './user.entity';
@@ -25,6 +25,22 @@ export class UserService {
       );
     }
 
+    return user.toResponseObject();
+  }
+
+  async register(data) {
+    const { username } = data;
+    let user: any = await this.userRepository.findOne({ where: { username } });
+
+    if (user) {
+      throw new HttpException(
+        `User ${username} already exists`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    user = await this.userRepository.create(data);
+    await this.userRepository.save(user);
     return user.toResponseObject();
   }
 }
