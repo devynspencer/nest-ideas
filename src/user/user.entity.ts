@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
 @Entity('user')
 export class UserEntity {
@@ -23,6 +24,12 @@ export class UserEntity {
 
   @Column('text')
   password: string;
+
+  private get token() {
+    const { id, username } = this;
+
+    return jwt.sign({ id, username }, process.env.SECRET, { expiresIn: '7d' });
+  }
 
   @BeforeInsert()
   async hashPassword() {
