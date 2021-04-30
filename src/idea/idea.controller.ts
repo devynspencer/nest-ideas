@@ -22,7 +22,7 @@ export class IdeaController {
 
   @Post()
   createIdea(@Body() data: IdeaDto) {
-    Logger.log(`Creating idea: ${data}`, 'Idea');
+    Logger.log(`Creating idea: ${JSON.stringify(data)}`, 'Idea');
     return this.ideaService.create(data);
   }
 
@@ -33,7 +33,7 @@ export class IdeaController {
 
   @Put(':id')
   updateIdea(@Param('id') id: string, @Body() data: Partial<IdeaDto>) {
-    Logger.log(`Updating idea ${id}: ${data}`, 'Idea');
+    Logger.log(`Updating idea ${id}: ${JSON.stringify(data)}`, 'Idea');
     return this.ideaService.update(id, data);
   }
 
