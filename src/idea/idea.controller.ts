@@ -45,6 +45,7 @@ export class IdeaController {
 
   @Delete(':id')
   deleteidea(@Param('id') id: string) {
+    this.logger.log(`Deleting idea ${id}`);
     return this.ideaService.delete(id);
   }
 }
