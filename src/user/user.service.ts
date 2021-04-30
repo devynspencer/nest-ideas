@@ -9,4 +9,9 @@ export class UserService {
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
   ) {}
+
+  async showAll() {
+    const users = await this.userRepository.find();
+    return users.map(user => user.toResponseObject());
+  }
 }
