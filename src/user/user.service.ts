@@ -32,7 +32,7 @@ export class UserService {
 
   async register(data: UserDto): Promise<UserRo> {
     const { username, password } = data;
-    let user: any = await this.userRepository.findOne({ where: { username } });
+    let user = await this.userRepository.findOne({ where: { username } });
 
     if (user) {
       throw new HttpException(
