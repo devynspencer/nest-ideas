@@ -2,6 +2,7 @@ import { Body, Controller, Get, Logger, Post, UsePipes } from '@nestjs/common';
 import { ValidationPipe } from '../shared/validation.pipe';
 import { UserDto } from './user.dto';
 import { UserService } from './user.service';
+import { User } from './user.decorator';
 
 @Controller()
 export class UserController {
@@ -10,7 +11,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('api/users')
-  showAllUsers() {
+  showAllUsers(@User() user) {
     return this.userService.showAll();
   }
 
