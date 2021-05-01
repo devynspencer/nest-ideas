@@ -30,7 +30,10 @@ export class IdeaService {
   }
 
   async read(id: string): Promise<IdeaRo> {
-    const idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author'] });
+    const idea = await this.ideaRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
 
     if (!idea) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
@@ -48,12 +51,18 @@ export class IdeaService {
 
     await this.ideaRepository.update({ id }, data);
 
-    idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author'] });
+    idea = await this.ideaRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
     return this.toResponseObject(idea);
   }
 
   async delete(id: string): Promise<IdeaRo> {
-    const idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author'] });
+    const idea = await this.ideaRepository.findOne({
+      where: { id },
+      relations: ['author'],
+    });
 
     if (!idea) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
