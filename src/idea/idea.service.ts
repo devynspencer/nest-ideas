@@ -53,7 +53,7 @@ export class IdeaService {
   }
 
   async delete(id: string) {
-    const idea = this.ideaRepository.findOne({ where: { id } });
+    const idea = await this.ideaRepository.findOne({ where: { id } });
 
     if (!idea) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
