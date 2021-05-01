@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 import { IdeaDto } from './idea.dto';
 import { IdeaEntity } from './idea.entity';
 
@@ -9,16 +10,20 @@ export class IdeaService {
   constructor(
     @InjectRepository(IdeaEntity)
     private ideaRepository: Repository<IdeaEntity>,
+
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
   ) {}
 
   async showAll() {
     return await this.ideaRepository.find();
   }
 
-  async create(data: IdeaDto) {
-    const idea = await this.ideaRepository.create(data);
+  async create(userId: string, data: IdeaDto) {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const idea = await this.ideaRepository.create({ ...data, author: user });
     await this.ideaRepository.save(idea);
-    return idea;
+    return { ...idea, author: idea.author.toResponseObject() };
   }
 
   async read(id: string) {
