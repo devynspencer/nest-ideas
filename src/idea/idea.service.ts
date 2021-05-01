@@ -42,7 +42,11 @@ export class IdeaService {
     return this.toResponseObject(idea);
   }
 
-  async update(id: string, userId: string, data: Partial<IdeaDto>): Promise<IdeaRo> {
+  async update(
+    id: string,
+    userId: string,
+    data: Partial<IdeaDto>,
+  ): Promise<IdeaRo> {
     let idea = await this.ideaRepository.findOne({
       where: { id },
       relations: ['author'],
