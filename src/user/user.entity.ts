@@ -32,6 +32,7 @@ export class UserEntity {
   @Column('text')
   password: string;
 
+  // eslint-disable-next-line
   @OneToMany(type => IdeaEntity, idea => idea.author)
   ideas: IdeaEntity[];
 

@@ -25,6 +25,7 @@ export class IdeaEntity {
   @Column('text')
   description: string;
 
+  // eslint-disable-next-line
   @ManyToOne(type => UserEntity, author => author.ideas)
   author: UserEntity;
 }
