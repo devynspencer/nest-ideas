@@ -36,7 +36,7 @@ export class IdeaService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
-    return idea;
+    return this.toResponseObject(idea);
   }
 
   async update(id: string, data: Partial<IdeaDto>) {
@@ -49,8 +49,7 @@ export class IdeaService {
     await this.ideaRepository.update({ id }, data);
 
     idea = await this.ideaRepository.findOne({ where: { id } });
-
-    return idea;
+    return this.toResponseObject(idea);
   }
 
   async delete(id: string) {
@@ -61,7 +60,7 @@ export class IdeaService {
     }
 
     await this.ideaRepository.delete({ id });
-    return idea;
+    return this.toResponseObject(idea);
   }
 
   private toResponseObject(idea: IdeaEntity) {
