@@ -23,7 +23,7 @@ export class IdeaService {
     const user = await this.userRepository.findOne({ where: { id: userId } });
     const idea = await this.ideaRepository.create({ ...data, author: user });
     await this.ideaRepository.save(idea);
-    return { ...idea, author: idea.author.toResponseObject() };
+    return { ...idea, author: idea.author.toResponseObject(false) };
   }
 
   async read(id: string) {
