@@ -53,14 +53,14 @@ export class IdeaController {
     @User('id') user,
   ) {
     this.logData({ user, data, id });
-    return this.ideaService.update(id, data);
+    return this.ideaService.update(id, user, data);
   }
 
   @Delete(':id')
   @UseGuards(new AuthGuard())
   deleteIdea(@Param('id') id: string, @User('id') user) {
     this.logData({ user, id });
-    return this.ideaService.delete(id);
+    return this.ideaService.delete(id, user);
   }
 
   private logData(options: any) {

@@ -42,7 +42,7 @@ export class IdeaService {
     return this.toResponseObject(idea);
   }
 
-  async update(id: string, data: Partial<IdeaDto>): Promise<IdeaRo> {
+  async update(id: string, userId: string, data: Partial<IdeaDto>): Promise<IdeaRo> {
     let idea = await this.ideaRepository.findOne({
       where: { id },
       relations: ['author'],
@@ -51,6 +51,8 @@ export class IdeaService {
     if (!idea) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
+
+    this.verifyOwnership(idea, userId);
 
     await this.ideaRepository.update({ id }, data);
 
@@ -61,7 +63,7 @@ export class IdeaService {
     return this.toResponseObject(idea);
   }
 
-  async delete(id: string): Promise<IdeaRo> {
+  async delete(id: string, userId: string): Promise<IdeaRo> {
     const idea = await this.ideaRepository.findOne({
       where: { id },
       relations: ['author'],
@@ -71,11 +73,19 @@ export class IdeaService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
 
+    this.verifyOwnership(idea, userId);
+
     await this.ideaRepository.delete({ id });
     return this.toResponseObject(idea);
   }
 
   private toResponseObject(idea: IdeaEntity): IdeaRo {
     return { ...idea, author: idea.author.toResponseObject(false) };
+  }
+
+  private verifyOwnership(idea: IdeaEntity, userId: string) {
+    if (idea.author.id !== userId) {
+      throw new HttpException('Incorrect user', HttpStatus.UNAUTHORIZED);
+    }
   }
 }
