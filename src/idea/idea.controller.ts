@@ -58,7 +58,7 @@ export class IdeaController {
 
   @Delete(':id')
   @UseGuards(new AuthGuard())
-  deleteidea(@Param('id') id: string, @User('id') user) {
+  deleteIdea(@Param('id') id: string, @User('id') user) {
     this.logData({ user, id });
     return this.ideaService.delete(id);
   }
