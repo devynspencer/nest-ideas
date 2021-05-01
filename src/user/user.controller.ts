@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Logger, Post, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Post,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
+import { AuthGuard } from '../shared/auth.guard';
 import { ValidationPipe } from '../shared/validation.pipe';
 import { UserDto } from './user.dto';
 import { UserService } from './user.service';
@@ -11,6 +20,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('api/users')
+  @UseGuards(new AuthGuard())
   showAllUsers(@User() user) {
     return this.userService.showAll();
   }
