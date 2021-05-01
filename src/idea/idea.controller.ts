@@ -24,21 +24,20 @@ export class IdeaController {
 
   @Get()
   @UseGuards(new AuthGuard())
-  showAllIdeas(@User() user) {
+  showAllIdeas(@User('id') user) {
     return this.ideaService.showAll();
   }
 
   @Post()
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
-  createIdea(@Body() data: IdeaDto, @User() user) {
-    this.logger.log(`Creating idea: ${JSON.stringify(data)}`);
-    return this.ideaService.create(data);
+  createIdea(@Body() data: IdeaDto, @User('id') user) {
+    return this.ideaService.create(user, data);
   }
 
   @Get(':id')
   @UseGuards(new AuthGuard())
-  readIdea(@Param('id') id: string, @User() user) {
+  readIdea(@Param('id') id: string, @User('id') user) {
     return this.ideaService.read(id);
   }
 
@@ -48,7 +47,7 @@ export class IdeaController {
   updateIdea(
     @Param('id') id: string,
     @Body() data: Partial<IdeaDto>,
-    @User() user,
+    @User('id') user,
   ) {
     this.logger.log(`Updating idea ${id}: ${JSON.stringify(data)}`);
     return this.ideaService.update(id, data);
@@ -56,8 +55,7 @@ export class IdeaController {
 
   @Delete(':id')
   @UseGuards(new AuthGuard())
-  deleteidea(@Param('id') id: string, @User() user) {
-    this.logger.log(`Deleting idea ${id}`);
+  deleteidea(@Param('id') id: string, @User('id') user) {
     return this.ideaService.delete(id);
   }
 }
