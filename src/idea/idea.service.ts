@@ -16,7 +16,7 @@ export class IdeaService {
   ) {}
 
   async showAll() {
-    return await this.ideaRepository.find();
+    return await this.ideaRepository.find({ relations: ['author'] });
   }
 
   async create(userId: string, data: IdeaDto) {
