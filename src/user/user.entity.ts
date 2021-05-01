@@ -5,6 +5,7 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -18,6 +19,9 @@ export class UserEntity {
 
   @CreateDateColumn()
   created: Date;
+
+  @UpdateDateColumn()
+  updated: Date;
 
   @Column({
     type: 'text',

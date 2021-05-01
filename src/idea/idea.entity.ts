@@ -4,6 +4,7 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
@@ -14,6 +15,9 @@ export class IdeaEntity {
 
   @CreateDateColumn('')
   created: Date;
+
+  @UpdateDateColumn()
+  updated: Date;
 
   @Column('text')
   idea: string;
