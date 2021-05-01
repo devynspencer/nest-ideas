@@ -25,6 +25,7 @@ export class IdeaController {
   @Get()
   @UseGuards(new AuthGuard())
   showAllIdeas(@User('id') user) {
+    this.logData({ user });
     return this.ideaService.showAll();
   }
 
@@ -32,12 +33,14 @@ export class IdeaController {
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
   createIdea(@Body() data: IdeaDto, @User('id') user) {
+    this.logData({ user, data });
     return this.ideaService.create(user, data);
   }
 
   @Get(':id')
   @UseGuards(new AuthGuard())
   readIdea(@Param('id') id: string, @User('id') user) {
+    this.logData({ user, id });
     return this.ideaService.read(id);
   }
 
@@ -49,13 +52,20 @@ export class IdeaController {
     @Body() data: Partial<IdeaDto>,
     @User('id') user,
   ) {
-    this.logger.log(`Updating idea ${id}: ${JSON.stringify(data)}`);
+    this.logData({ user, data, id });
     return this.ideaService.update(id, data);
   }
 
   @Delete(':id')
   @UseGuards(new AuthGuard())
   deleteidea(@Param('id') id: string, @User('id') user) {
+    this.logData({ user, id });
     return this.ideaService.delete(id);
+  }
+
+  private logData(options: any) {
+    options.user && this.logger.log(`User: ${JSON.stringify(options.user)}`);
+    options.body && this.logger.log(`Data: ${JSON.stringify(options.body)}`);
+    options.id && this.logger.log(`Idea: ${JSON.stringify(options.id)}`);
   }
 }
