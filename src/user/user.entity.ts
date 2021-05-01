@@ -52,8 +52,8 @@ export class UserEntity {
   }
 
   toResponseObject(includeToken = true): UserRo {
-    const { id, created, username, token } = this;
-    const responseObject: UserRo = { id, created, username };
+    const { id, created, updated, username, token } = this;
+    const responseObject: UserRo = { id, created, updated, username };
 
     if (includeToken) {
       responseObject.token = token;
