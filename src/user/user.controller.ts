@@ -33,6 +33,11 @@ export class UserController {
     return this.userService.show(username);
   }
 
+  @Get('auth/whoami')
+  showSelf(@User('username') username: string) {
+    return this.userService.show(username);
+  }
+
   @Post('auth/login')
   @UsePipes(new ValidationPipe())
   login(@Body() data: UserDto) {
