@@ -18,7 +18,9 @@ export class IdeaService {
   ) {}
 
   async showAll(): Promise<IdeaRo[]> {
-    const ideas = await this.ideaRepository.find({ relations: ['author', 'upvotes', 'downvotes'] });
+    const ideas = await this.ideaRepository.find({
+      relations: ['author', 'upvotes', 'downvotes'],
+    });
 
     return ideas.map(idea => this.toResponseObject(idea));
   }
@@ -86,7 +88,10 @@ export class IdeaService {
   }
 
   private toResponseObject(idea: IdeaEntity): IdeaRo {
-    const responseObject: any = { ...idea, author: idea.author.toResponseObject(false) };
+    const responseObject: any = {
+      ...idea,
+      author: idea.author.toResponseObject(false),
+    };
 
     if (responseObject.upvotes) {
       responseObject.upvotes = idea.upvotes.length;
@@ -107,13 +112,19 @@ export class IdeaService {
 
   async bookmark(id: string, userId: string): Promise<UserRo> {
     const idea = await this.ideaRepository.findOne({ where: { id } });
-    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['bookmarks'] });
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['bookmarks'],
+    });
 
     if (user.bookmarks.filter(bookmark => bookmark.id === idea.id).length < 1) {
       user.bookmarks.push(idea);
       await this.userRepository.save(user);
     } else {
-      throw new HttpException('Idea already bookmarked', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Idea already bookmarked',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return user.toResponseObject(false);
@@ -121,10 +132,15 @@ export class IdeaService {
 
   async unbookmark(id: string, userId: string): Promise<UserRo> {
     const idea = await this.ideaRepository.findOne({ where: { id } });
-    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['bookmarks'] });
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['bookmarks'],
+    });
 
     if (user.bookmarks.filter(bookmark => bookmark.id === idea.id).length > 0) {
-      user.bookmarks = user.bookmarks.filter(bookmark => bookmark.id !== idea.id);
+      user.bookmarks = user.bookmarks.filter(
+        bookmark => bookmark.id !== idea.id,
+      );
       await this.userRepository.save(user);
     } else {
       throw new HttpException('Idea not bookmarked', HttpStatus.BAD_REQUEST);
@@ -134,7 +150,10 @@ export class IdeaService {
   }
 
   async upvote(id: string, userId: string) {
-    let idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author', 'upvotes', 'downvotes']});
+    let idea = await this.ideaRepository.findOne({
+      where: { id },
+      relations: ['author', 'upvotes', 'downvotes'],
+    });
     const user = await this.userRepository.findOne({ where: { id: userId } });
 
     idea = await this.vote(idea, user, Vote.UP);
@@ -142,7 +161,10 @@ export class IdeaService {
   }
 
   async downvote(id: string, userId: string) {
-    let idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author', 'upvotes', 'downvotes']});
+    let idea = await this.ideaRepository.findOne({
+      where: { id },
+      relations: ['author', 'upvotes', 'downvotes'],
+    });
     const user = await this.userRepository.findOne({ where: { id: userId } });
 
     idea = await this.vote(idea, user, Vote.DOWN);
