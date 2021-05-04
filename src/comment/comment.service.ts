@@ -25,7 +25,7 @@ export class CommentService {
       relations: ['author', 'idea'],
     });
 
-    return comment;
+    return this.toResponseObject(comment);
   }
 
   async showByIdea(ideaId: string) {
@@ -43,7 +43,7 @@ export class CommentService {
       relations: ['author'],
     });
 
-    return comments;
+    return comments.map(comment => this.toResponseObject(comment));
   }
 
   async create(ideaId: string, userId: string, data: CommentDto) {
@@ -61,7 +61,7 @@ export class CommentService {
     });
 
     await this.commentRepository.save(comment);
-    return comment;
+    return this.toResponseObject(comment);
   }
 
   async delete(id: string, userId: string) {
@@ -79,5 +79,15 @@ export class CommentService {
 
     await this.commentRepository.remove(comment);
     return comment;
+  }
+
+  private toResponseObject(comment: CommentEntity) {
+    const responseObject: any = comment;
+
+    if (comment.author) {
+      responseObject.author = comment.author.toResponseObject(false);
+    }
+
+    return responseObject;
   }
 }
