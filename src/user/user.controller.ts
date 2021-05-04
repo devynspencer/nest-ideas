@@ -27,14 +27,14 @@ export class UserController {
     return this.userService.showAll(page);
   }
 
-  @Post('login')
+  @Post('auth/login')
   @UsePipes(new ValidationPipe())
   login(@Body() data: UserDto) {
     this.logger.log(`User login: ${JSON.stringify(data)}`);
     return this.userService.login(data);
   }
 
-  @Post('register')
+  @Post('auth/register')
   @UsePipes(new ValidationPipe())
   register(@Body() data: UserDto) {
     this.logger.log(`User registered: ${JSON.stringify(data)}`);
