@@ -154,8 +154,8 @@ export class IdeaService {
 
     if (
       // User has voted already
-      idea[vote].filter(voter => voter.id === user.id).length > 0 ||
-      idea[opposite].filter(voter => voter.id === user.id).length > 0
+      idea[vote].some(voter => voter.id === user.id) ||
+      idea[opposite].some(voter => voter.id === user.id)
     ) {
       // Remove existing vote
       idea[opposite] = idea[opposite].filter(voter => voter.id !== user.id);
@@ -163,7 +163,7 @@ export class IdeaService {
       await this.ideaRepository.save(idea);
 
       // User hasn't voted yet
-    } else if (idea[vote].filter(voter => voter.id === user.id).length < 1) {
+    } else if (!idea[vote].some(voter => voter.id === user.id)) {
       idea[vote].push(user);
       await this.ideaRepository.save(idea);
     } else {
