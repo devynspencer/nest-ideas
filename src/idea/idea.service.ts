@@ -5,6 +5,7 @@ import { UserRo } from '../user/user.dto';
 import { UserEntity } from '../user/user.entity';
 import { IdeaDto, IdeaRo } from './idea.dto';
 import { IdeaEntity } from './idea.entity';
+import { Vote } from '../shared/vote.enum';
 
 @Injectable()
 export class IdeaService {
@@ -17,7 +18,7 @@ export class IdeaService {
   ) {}
 
   async showAll(): Promise<IdeaRo[]> {
-    const ideas = await this.ideaRepository.find({ relations: ['author'] });
+    const ideas = await this.ideaRepository.find({ relations: ['author', 'upvotes', 'downvotes'] });
 
     return ideas.map(idea => this.toResponseObject(idea));
   }
@@ -33,7 +34,7 @@ export class IdeaService {
   async read(id: string): Promise<IdeaRo> {
     const idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author'],
+      relations: ['author', 'upvotes', 'downvotes'],
     });
 
     if (!idea) {
@@ -50,7 +51,7 @@ export class IdeaService {
   ): Promise<IdeaRo> {
     let idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author'],
+      relations: ['author', 'upvotes', 'downvotes'],
     });
 
     if (!idea) {
@@ -71,7 +72,7 @@ export class IdeaService {
   async delete(id: string, userId: string): Promise<IdeaRo> {
     const idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author'],
+      relations: ['author', 'upvotes', 'downvotes'],
     });
 
     if (!idea) {
@@ -85,7 +86,17 @@ export class IdeaService {
   }
 
   private toResponseObject(idea: IdeaEntity): IdeaRo {
-    return { ...idea, author: idea.author.toResponseObject(false) };
+    const responseObject: any = { ...idea, author: idea.author.toResponseObject(false) };
+
+    if (responseObject.upvotes) {
+      responseObject.upvotes = idea.upvotes.length;
+    }
+
+    if (responseObject.downvotes) {
+      responseObject.downvotes = idea.downvotes.length;
+    }
+
+    return responseObject;
   }
 
   private verifyOwnership(idea: IdeaEntity, userId: string) {
@@ -120,5 +131,45 @@ export class IdeaService {
     }
 
     return user.toResponseObject(false);
+  }
+
+  async upvote(id: string, userId: string) {
+    let idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author', 'upvotes', 'downvotes']});
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    idea = await this.vote(idea, user, Vote.UP);
+    return this.toResponseObject(idea);
+  }
+
+  async downvote(id: string, userId: string) {
+    let idea = await this.ideaRepository.findOne({ where: { id }, relations: ['author', 'upvotes', 'downvotes']});
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+
+    idea = await this.vote(idea, user, Vote.DOWN);
+    return this.toResponseObject(idea);
+  }
+
+  private async vote(idea: IdeaEntity, user: UserEntity, vote: Vote) {
+    const opposite = vote === Vote.UP ? Vote.DOWN : Vote.UP;
+
+    if (
+      // User has voted already
+      idea[vote].filter(voter => voter.id === user.id).length > 0 ||
+      idea[opposite].filter(voter => voter.id === user.id).length > 0
+    ) {
+      // Remove existing vote
+      idea[opposite] = idea[opposite].filter(voter => voter.id !== user.id);
+      idea[vote] = idea[vote].filter(voter => voter.id !== user.id);
+      await this.ideaRepository.save(idea);
+
+      // User hasn't voted yet
+    } else if (idea[vote].filter(voter => voter.id === user.id).length < 1) {
+      idea[vote].push(user);
+      await this.ideaRepository.save(idea);
+    } else {
+      throw new HttpException('Unable to cast vote', HttpStatus.BAD_REQUEST);
+    }
+
+    return idea;
   }
 }

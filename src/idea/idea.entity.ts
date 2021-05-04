@@ -2,6 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -28,4 +30,14 @@ export class IdeaEntity {
   // eslint-disable-next-line
   @ManyToOne(type => UserEntity, author => author.ideas)
   author: UserEntity;
+
+  // eslint-disable-next-line
+  @ManyToMany(type => UserEntity, { cascade: true })
+  @JoinTable()
+  upvotes: UserEntity[];
+
+  // eslint-disable-next-line
+  @ManyToMany(type => UserEntity, { cascade: true })
+  @JoinTable()
+  downvotes: UserEntity[];
 }
