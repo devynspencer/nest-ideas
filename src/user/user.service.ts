@@ -21,7 +21,10 @@ export class UserService {
   }
 
   async show(username: string) {
-    const user = await this.userRepository.findOne({ where: { username }, relations: ['ideas', 'bookmarks'] });
+    const user = await this.userRepository.findOne({
+      where: { username },
+      relations: ['ideas', 'bookmarks'],
+    });
 
     return user.toResponseObject(false);
   }
