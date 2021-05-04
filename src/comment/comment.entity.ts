@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { IdeaEntity } from '../idea/idea.entity';
 import { UserEntity } from '../user/user.entity';
 
 @Entity('comment')
@@ -23,4 +24,8 @@ export class CommentEntity {
   @ManyToOne(type => UserEntity)
   @JoinTable()
   author: UserEntity;
+
+  // eslint-disable-next-line
+  @ManyToOne(type => IdeaEntity, idea => idea.comments)
+  idea: IdeaEntity;
 }
