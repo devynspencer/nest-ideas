@@ -48,6 +48,11 @@ export class CommentService {
 
   async create(ideaId: string, userId: string, data: CommentDto) {
     const idea = await this.ideaRepository.findOne({ where: { id: ideaId } });
+
+    if (!idea) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
+
     const user = await this.userRepository.findOne({ where: { id: userId } });
     const comment = await this.commentRepository.create({
       ...data,
