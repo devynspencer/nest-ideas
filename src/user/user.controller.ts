@@ -4,6 +4,7 @@ import {
   Get,
   Logger,
   Post,
+  Query,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
@@ -21,9 +22,9 @@ export class UserController {
 
   @Get('api/users')
   @UseGuards(new AuthGuard())
-  showAllUsers(@User() user) {
+  showAllUsers(@User() user, @Query('page') page: number) {
     this.logger.log(`All users listed by: ${JSON.stringify(user)}`);
-    return this.userService.showAll();
+    return this.userService.showAll(page);
   }
 
   @Post('login')
