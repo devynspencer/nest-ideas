@@ -44,7 +44,7 @@ export class CommentController {
     return this.commentService.create(idea, user, data);
   }
 
-  @Delete('idea/:id')
+  @Delete(':id')
   @UseGuards(new AuthGuard())
   deleteComment(@Param('id') id: string, @User('id') user: string) {
     return this.commentService.delete(id, user);
