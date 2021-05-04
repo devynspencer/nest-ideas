@@ -19,7 +19,7 @@ export class IdeaService {
 
   async showAll(): Promise<IdeaRo[]> {
     const ideas = await this.ideaRepository.find({
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author', 'upvotes', 'downvotes', 'comments'],
     });
 
     return ideas.map(idea => this.toResponseObject(idea));
@@ -36,7 +36,7 @@ export class IdeaService {
   async read(id: string): Promise<IdeaRo> {
     const idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author', 'upvotes', 'downvotes', 'comments'],
     });
 
     if (!idea) {
@@ -66,7 +66,7 @@ export class IdeaService {
 
     idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author'],
+      relations: ['author', 'comments'],
     });
     return this.toResponseObject(idea);
   }
@@ -74,7 +74,7 @@ export class IdeaService {
   async delete(id: string, userId: string): Promise<IdeaRo> {
     const idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author', 'upvotes', 'downvotes', 'comments'],
     });
 
     if (!idea) {
