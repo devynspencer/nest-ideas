@@ -24,7 +24,6 @@ export class IdeaController {
   constructor(private ideaService: IdeaService) {}
 
   @Get()
-  @UseGuards(new AuthGuard())
   showAllIdeas(@User('id') user: string, @Query('page') page: number) {
     this.logData({ user });
     return this.ideaService.showAll(page);
@@ -44,7 +43,6 @@ export class IdeaController {
   }
 
   @Get(':id')
-  @UseGuards(new AuthGuard())
   readIdea(@Param('id') id: string, @User('id') user: string) {
     this.logData({ user, id });
     return this.ideaService.read(id);
