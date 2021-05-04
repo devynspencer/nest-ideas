@@ -53,7 +53,7 @@ export class IdeaService {
   ): Promise<IdeaRo> {
     let idea = await this.ideaRepository.findOne({
       where: { id },
-      relations: ['author', 'upvotes', 'downvotes'],
+      relations: ['author'],
     });
 
     if (!idea) {
