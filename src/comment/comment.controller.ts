@@ -37,6 +37,6 @@ export class CommentController {
   ) {}
 
   @Delete('idea/:id')
-  @UserGuards(new AuthGuard())
+  @UseGuards(new AuthGuard())
   deleteComment(@Param('id') id: string, @User('id') user: string) {}
 }
