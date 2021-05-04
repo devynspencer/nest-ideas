@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Logger,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -25,6 +26,11 @@ export class UserController {
   showAllUsers(@User('id') user: number, @Query('page') page: number) {
     this.logger.log(`All users listed by user: ${user}`);
     return this.userService.showAll(page);
+  }
+
+  @Get('api/users/:username')
+  showUser(@Param('username') username: string) {
+    return this.userService.show(username);
   }
 
   @Post('auth/login')
