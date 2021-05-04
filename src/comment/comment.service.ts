@@ -29,12 +29,12 @@ export class CommentService {
   }
 
   async showByIdea(ideaId: string) {
-    const idea = await this.ideaRepository.findOne({
-      where: { id: ideaId },
-      relations: ['comments', 'comments.author', 'comments.idea'],
+    const comments = await this.commentRepository.find({
+      where: { idea: { id: ideaId } },
+      relations: ['author', 'idea'],
     });
 
-    return idea.comments;
+    return comments.map(comment => this.toResponseObject(comment));
   }
 
   async showByUser(userId: string) {
