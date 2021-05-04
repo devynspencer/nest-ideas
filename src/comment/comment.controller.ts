@@ -19,13 +19,19 @@ export class CommentController {
   constructor(private commentService: CommentService) {}
 
   @Get('idea/:id')
-  showCommentsByIdea(@Param('id') idea: string) {}
+  showCommentsByIdea(@Param('id') idea: string) {
+    return this.commentService.showByIdea(idea);
+  }
 
   @Get('user/:id')
-  showCommentsByUser(@Param('id') user: string) {}
+  showCommentsByUser(@Param('id') user: string) {
+    return this.commentService.showByUser(user);
+  }
 
   @Get(':id')
-  showComment(@Param('id') id: string) {}
+  showComment(@Param('id') id: string) {
+    return this.commentService.show(id);
+  }
 
   @Post('idea/:id')
   @UseGuards(new AuthGuard())
@@ -34,9 +40,13 @@ export class CommentController {
     @Param('id') idea: string,
     @User('id') user: string,
     @Body() data: CommentDto,
-  ) {}
+  ) {
+    return this.commentService.create(idea, user, data);
+  }
 
   @Delete('idea/:id')
   @UseGuards(new AuthGuard())
-  deleteComment(@Param('id') id: string, @User('id') user: string) {}
+  deleteComment(@Param('id') id: string, @User('id') user: string) {
+    return this.commentService.delete(id, user);
+  }
 }
