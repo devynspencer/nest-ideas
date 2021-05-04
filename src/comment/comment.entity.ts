@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserEntity } from '../user/user.entity';
 
 @Entity('comment')
 export class CommentEntity {
@@ -15,4 +18,9 @@ export class CommentEntity {
 
   @Column('text')
   body: string;
+
+  // eslint-disable-next-line
+  @ManyToOne(type => UserEntity)
+  @JoinTable()
+  author: UserEntity;
 }
