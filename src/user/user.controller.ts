@@ -22,8 +22,8 @@ export class UserController {
 
   @Get('api/users')
   @UseGuards(new AuthGuard())
-  showAllUsers(@User() user, @Query('page') page: number) {
-    this.logger.log(`All users listed by: ${JSON.stringify(user)}`);
+  showAllUsers(@User('id') user: number, @Query('page') page: number) {
+    this.logger.log(`All users listed by user: ${user}`);
     return this.userService.showAll(page);
   }
 
