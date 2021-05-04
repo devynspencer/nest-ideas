@@ -30,6 +30,11 @@ export class IdeaController {
     return this.ideaService.showAll(page);
   }
 
+  @Get('/latest')
+  showLatestIdeas(@Query('page') page: number) {
+    return this.ideaService.showAll(page, true);
+  }
+
   @Post()
   @UseGuards(new AuthGuard())
   @UsePipes(new ValidationPipe())
