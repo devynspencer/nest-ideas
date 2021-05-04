@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
@@ -24,9 +25,9 @@ export class IdeaController {
 
   @Get()
   @UseGuards(new AuthGuard())
-  showAllIdeas(@User('id') user: string) {
+  showAllIdeas(@User('id') user: string, @Query('page') page: number) {
     this.logData({ user });
-    return this.ideaService.showAll();
+    return this.ideaService.showAll(page);
   }
 
   @Post()
