@@ -3,6 +3,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -36,6 +38,11 @@ export class UserEntity {
   @OneToMany(type => IdeaEntity, idea => idea.author)
   ideas: IdeaEntity[];
 
+  // eslint-disable-next-line
+  @ManyToMany(type => IdeaEntity, { cascade: true })
+  @JoinTable()
+  bookmarks: IdeaEntity[];
+
   private get token() {
     const { id, username } = this;
 
@@ -61,6 +68,10 @@ export class UserEntity {
 
     if (this.ideas) {
       responseObject.ideas = this.ideas;
+    }
+
+    if (this.bookmarks) {
+      responseObject.bookmarks = this.bookmarks;
     }
 
     return responseObject;

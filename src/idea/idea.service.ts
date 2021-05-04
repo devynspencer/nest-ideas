@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserRo } from '../user/user.dto';
 import { UserEntity } from '../user/user.entity';
 import { IdeaDto, IdeaRo } from './idea.dto';
 import { IdeaEntity } from './idea.entity';
@@ -91,5 +92,33 @@ export class IdeaService {
     if (idea.author.id !== userId) {
       throw new HttpException('Incorrect user', HttpStatus.UNAUTHORIZED);
     }
+  }
+
+  async bookmark(id: string, userId: string): Promise<UserRo> {
+    const idea = await this.ideaRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['bookmarks'] });
+
+    if (user.bookmarks.filter(bookmark => bookmark.id === idea.id).length < 1) {
+      user.bookmarks.push(idea);
+      await this.userRepository.save(user);
+    } else {
+      throw new HttpException('Idea already bookmarked', HttpStatus.BAD_REQUEST);
+    }
+
+    return user.toResponseObject(false);
+  }
+
+  async unbookmark(id: string, userId: string): Promise<UserRo> {
+    const idea = await this.ideaRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { id: userId }, relations: ['bookmarks'] });
+
+    if (user.bookmarks.filter(bookmark => bookmark.id === idea.id).length > 0) {
+      user.bookmarks = user.bookmarks.filter(bookmark => bookmark.id !== idea.id);
+      await this.userRepository.save(user);
+    } else {
+      throw new HttpException('Idea not bookmarked', HttpStatus.BAD_REQUEST);
+    }
+
+    return user.toResponseObject(false);
   }
 }
