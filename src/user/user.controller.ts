@@ -22,9 +22,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   @Get('api/users')
-  @UseGuards(new AuthGuard())
-  showAllUsers(@User('id') user: number, @Query('page') page: number) {
-    this.logger.log(`All users listed by user: ${user}`);
+  showAllUsers(@Query('page') page: number) {
     return this.userService.showAll(page);
   }
 
