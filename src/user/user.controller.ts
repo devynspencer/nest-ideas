@@ -32,6 +32,7 @@ export class UserController {
   }
 
   @Get('auth/whoami')
+  @UseGuards(new AuthGuard())
   showSelf(@User('username') username: string) {
     return this.userService.show(username);
   }
