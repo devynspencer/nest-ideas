@@ -34,6 +34,7 @@ export class UserController {
   @Get('auth/whoami')
   @UseGuards(new AuthGuard())
   showSelf(@User('username') username: string) {
+    this.logger.log(`User lookup by: ${username}`);
     return this.userService.show(username);
   }
 
