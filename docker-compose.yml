@@ -8,6 +8,8 @@ services:
     command: npm run start:dev
     ports:
       - 3000:3000
+    depends_on:
+      - postgres
   postgres:
     image: postgres:alpine
     restart: always
